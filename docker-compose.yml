@@ -1,0 +1,58 @@
+version: "3.3"
+services:
+  home-assistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    #privileged: true
+    #network_mode: host
+    ports:
+      - 8123:8123
+    environment:
+      TZ: "Europe/Amsterdam"
+    volumes:
+      - ./docker/ha/config:/config
+    extra_hosts:
+      - "mosquitto:172.22.0.2"
+    depends_on:
+      - mosquitto      
+  
+  zigbee2mqtt:
+    image: koenkk/zigbee2mqtt:latest
+    container_name: zigbee2mqtt
+    networks:
+      proxy:
+        # The static IP is not really necessary, but adedd for symmetry
+        ipv4_address: 172.22.0.4
+    ports:
+      - 8080:8080
+    volumes:
+      - ./docker/zigbee2mqtt/data:/app/data
+      - /run/udev:/run/udev:ro
+    devices:
+      - /dev/cu.usbserial-21220:/dev/ttyUSB0
+    environment:
+      TZ: "Europe/Amsterdam"
+    depends_on:
+      - mosquitto
+
+  mosquitto:
+    image: "eclipse-mosquitto:2.0.17"
+    container_name: "mosquitto"
+    volumes:
+      - "./data/mosquitto/cfg:/mosquitto/config"
+      - "./data/mosquitto/data:/mosquitto/data"
+      - "./data/mosquitto/log:/mosquitto/log"
+    networks:
+      proxy:
+        # The static IP is needed for HASS - see comments in service "homeassistant" above.
+        ipv4_address: 172.22.0.2
+    environment:
+      TZ: Europe/Vienna
+
+# A network definition is necessary because homeassistant needs to define the IP or IP range
+# of the reverse proxy in the configuration of the http integration.
+# It is also necessary for the reverse proxy and to assign static IPs.
+networks:
+  proxy:
+    ipam:
+      config:
+        - subnet: 172.22.0.0/24
