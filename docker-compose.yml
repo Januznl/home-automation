@@ -6,6 +6,10 @@ services:
     #network_mode: host
     ports:
       - 8123:8123
+    networks:
+      proxy:
+        # The static IP is not really necessary, but adedd for symmetry
+        ipv4_address: 172.22.0.5
     environment:
       TZ: "Europe/Amsterdam"
     volumes:
@@ -28,7 +32,7 @@ services:
       - ./docker/zigbee2mqtt/data:/app/data
       - /run/udev:/run/udev:ro
     devices:
-      - /dev/cu.usbserial-21220:/dev/ttyUSB0
+      - /dev/ttyUSB0:/dev/ttyUSB0
     environment:
       TZ: "Europe/Amsterdam"
     depends_on:
