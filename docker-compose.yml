@@ -18,7 +18,7 @@ services:
       - "mosquitto:172.22.0.2"
     depends_on:
       - mosquitto      
-  
+
   zigbee2mqtt:
     image: koenkk/zigbee2mqtt:latest
     container_name: zigbee2mqtt
@@ -51,6 +51,18 @@ services:
         ipv4_address: 172.22.0.2
     environment:
       TZ: Europe/Vienna
+
+  esphome:
+    container_name: esphome
+    image: ghcr.io/esphome/esphome:stable
+    volumes:
+      - ./docker/esphome/config:/config
+    ports:
+      - 6052:6052
+    networks:
+      proxy:
+        # The static IP is not really necessary, but adedd for symmetry
+        ipv4_address: 172.22.0.6
 
 # A network definition is necessary because homeassistant needs to define the IP or IP range
 # of the reverse proxy in the configuration of the http integration.
