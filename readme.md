@@ -1,13 +1,13 @@
 # Home assistant setup with Zigbee running in Docker
 This repository holds a basic Home Assistant setup based on Docker Compose, with the following services:
 
-> [!IMPORTANT]
-> Docker-For-Mac does not support mounting USB devices into Docker containers, this is caused by the Virtualization layer within MacOS.
-
 * Home Assistant (see https://www.home-assistant.io/)
 * Zigbee2mqtt (see https://www.zigbee2mqtt.io/)
 * Mosquitto (see https://mosquitto.org/)
 * ESPHome (see https://esphome.io/)
+
+> [!IMPORTANT]
+> Docker-For-Mac does not support mounting USB devices into Docker containers, this is caused by the Virtualization layer within MacOS.
 
 ## Usage
 * Run `docker compose up`
