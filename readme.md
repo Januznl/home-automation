@@ -6,7 +6,7 @@ This repository holds a basic Home Assistant setup based on Docker Compose, with
 * Mosquitto (see https://mosquitto.org/)
 * ESPHome (see https://esphome.io/)
 
-> [!NOTE]
+> [!CAUTION]
 > Docker-For-Mac does not support mounting USB devices into Docker containers, this is caused by the Virtualization layer within MacOS.
 
 ## Usage
